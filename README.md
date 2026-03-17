@@ -1,8 +1,18 @@
 # toad-mcp-server 🐸
 
-MCP server exposing portfolio AI tools via [Model Context Protocol](https://modelcontextprotocol.io). Connect to Claude Desktop and call Semantic Search, Eval Framework, and Prompt Management tools directly from chat.
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white)
+![Node.js](https://img.shields.io/badge/Node.js-339933?logo=nodedotjs&logoColor=white)
+![MCP](https://img.shields.io/badge/MCP-Model_Context_Protocol-8B5CF6)
+![Zod](https://img.shields.io/badge/Zod-v4-3E67B1?logo=zod&logoColor=white)
+![ESLint](https://img.shields.io/badge/ESLint-4B32C3?logo=eslint&logoColor=white)
+![Prettier](https://img.shields.io/badge/Prettier-F7B93E?logo=prettier&logoColor=black)
+![CI](https://img.shields.io/github/actions/workflow/status/vola-trebla/toad-mcp-server/ci.yml?label=CI&logo=githubactions&logoColor=white)
+![License](https://img.shields.io/badge/License-ISC-blue)
 
-## Architecture
+> 🔌 MCP server exposing portfolio AI tools via [Model Context Protocol](https://modelcontextprotocol.io).
+> Connect to Claude Desktop and call Semantic Search, Eval Framework, and Prompt Management tools directly from chat.
+
+## 🏗️ Architecture
 
 ```
 ┌─────────────────────┐    stdio / HTTP     ┌──────────────────────────┐
@@ -22,7 +32,7 @@ MCP server exposing portfolio AI tools via [Model Context Protocol](https://mode
                                             └──────────────────────────┘
 ```
 
-## Tools
+## 🛠️ Tools
 
 | Tool                    | Description                                               | Read-only |
 | ----------------------- | --------------------------------------------------------- | --------- |
@@ -34,14 +44,14 @@ MCP server exposing portfolio AI tools via [Model Context Protocol](https://mode
 
 All tools support `response_format: "markdown" | "json"` where applicable.
 
-## Resources
+## 📦 Resources
 
 | URI                     | Description                                  |
 | ----------------------- | -------------------------------------------- |
 | `toad://system/status`  | Health status of all services (JSON)         |
 | `toad://prompts/{name}` | Get prompt by name with full metadata (JSON) |
 
-## Quick Start
+## 🚀 Quick Start
 
 ```bash
 # Install
@@ -60,7 +70,7 @@ TRANSPORT=http npm start
 npm run dev
 ```
 
-## Claude Desktop Setup
+## 🖥️ Claude Desktop Setup
 
 1. Build the server:
 
@@ -88,7 +98,7 @@ npm run dev
 
 3. Restart Claude Desktop — tools appear automatically.
 
-## Testing with MCP Inspector
+## 🔍 Testing with MCP Inspector
 
 ```bash
 npx @modelcontextprotocol/inspector node dist/index.js
@@ -96,7 +106,7 @@ npx @modelcontextprotocol/inspector node dist/index.js
 
 Opens a web UI to test each tool interactively.
 
-## Environment Variables
+## ⚙️ Environment Variables
 
 | Variable              | Default                 | Description                       |
 | --------------------- | ----------------------- | --------------------------------- |
@@ -106,7 +116,7 @@ Opens a web UI to test each tool interactively.
 | `PORT`                | `3100`                  | HTTP transport port               |
 | `HOST`                | `127.0.0.1`             | HTTP transport bind address       |
 
-## Scripts
+## 📜 Scripts
 
 | Script           | Description                   |
 | ---------------- | ----------------------------- |
@@ -116,7 +126,7 @@ Opens a web UI to test each tool interactively.
 | `npm run lint`   | ESLint check                  |
 | `npm run format` | Prettier format               |
 
-## Tech Stack
+## 🧱 Tech Stack
 
 - TypeScript (NodeNext, strict)
 - [@modelcontextprotocol/sdk](https://github.com/modelcontextprotocol/typescript-sdk) — MCP server SDK
@@ -124,6 +134,6 @@ Opens a web UI to test each tool interactively.
 - ESLint + Prettier + Husky — code quality
 - GitHub Actions — CI (lint → format → build)
 
-## License
+## 📄 License
 
 ISC
