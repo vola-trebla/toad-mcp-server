@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "toad-mcp-server": {
+      "command": "node",
+      "args": ["dist/index.js"],
+      "cwd": "/absolute/path/to/toad-mcp-server",
+      "env": {
+        "SEMANTIC_SEARCH_URL": "http://localhost:3001",
+        "EVAL_FRAMEWORK_URL": "http://localhost:3002"
+      }
+    }
+  }
+}
