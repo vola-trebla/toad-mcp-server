@@ -8,7 +8,10 @@ export function registerGetPromptTool(server: McpServer): void {
     "Get a specific prompt by name with full metadata including version, score history, and template content.",
     {
       name: z.string().describe("Prompt name to retrieve"),
-      response_format: z.enum(["markdown", "json"]).default("markdown").describe("Response format: markdown for human reading, json for machine processing"),
+      response_format: z
+        .enum(["markdown", "json"])
+        .default("markdown")
+        .describe("Response format: markdown for human reading, json for machine processing"),
     },
     {
       readOnlyHint: true,

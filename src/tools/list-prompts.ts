@@ -10,7 +10,10 @@ export function registerListPromptsTool(server: McpServer): void {
       limit: z.number().min(1).max(100).default(20).describe("Maximum number of prompts to return"),
       offset: z.number().min(0).default(0).describe("Number of prompts to skip"),
       tag: z.string().optional().describe("Filter prompts by tag"),
-      response_format: z.enum(["markdown", "json"]).default("markdown").describe("Response format: markdown for human reading, json for machine processing"),
+      response_format: z
+        .enum(["markdown", "json"])
+        .default("markdown")
+        .describe("Response format: markdown for human reading, json for machine processing"),
     },
     {
       readOnlyHint: true,

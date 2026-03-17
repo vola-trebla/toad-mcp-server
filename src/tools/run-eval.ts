@@ -63,7 +63,8 @@ export function registerRunEvalTool(server: McpServer): void {
           "",
           "### Details",
           ...details.map(
-            (d) => `- ${d.passed ? "PASS" : "FAIL"} \`${d.testCase}\` (${(d.score * 100).toFixed(1)}%)${d.output ? `: ${d.output}` : ""}`,
+            (d) =>
+              `- ${d.passed ? "PASS" : "FAIL"} \`${d.testCase}\` (${(d.score * 100).toFixed(1)}%)${d.output ? `: ${d.output}` : ""}`,
           ),
         ].join("\n");
 
