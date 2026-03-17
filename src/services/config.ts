@@ -5,4 +5,5 @@ export const config = {
   evalFramework: {
     baseUrl: process.env.EVAL_FRAMEWORK_URL ?? "http://localhost:3002",
   },
+  healthCheckTimeoutMs: 5_000,
 } as const;

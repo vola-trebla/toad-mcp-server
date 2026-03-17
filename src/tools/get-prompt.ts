@@ -1,6 +1,7 @@
 import { z } from "zod/v4";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { getPromptByName } from "../services/prompt-registry.js";
+import { textContent, errorResponse } from "../utils/responses.js";
 
 export function registerGetPromptTool(server: McpServer): void {
   server.tool(
@@ -23,21 +24,11 @@ export function registerGetPromptTool(server: McpServer): void {
       const prompt = getPromptByName(name);
 
       if (!prompt) {
-        return {
-          isError: true,
-          content: [
-            {
-              type: "text" as const,
-              text: `Prompt "${name}" not found. Use toad_list_prompts to see available prompts.`,
-            },
-          ],
-        };
+        return errorResponse(`Prompt "${name}" not found. Use toad_list_prompts to see available prompts.`);
       }
 
       if (response_format === "json") {
-        return {
-          content: [{ type: "text" as const, text: JSON.stringify(prompt, null, 2) }],
-        };
+        return textContent(JSON.stringify(prompt, null, 2));
       }
 
       const scoreHistory = prompt.scoreHistory.length
@@ -61,9 +52,7 @@ export function registerGetPromptTool(server: McpServer): void {
         scoreHistory,
       ];
 
-      return {
-        content: [{ type: "text" as const, text: lines.join("\n") }],
-      };
+      return textContent(lines.join("\n"));
     },
   );
 }
