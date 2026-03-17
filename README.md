@@ -16,18 +16,18 @@
 
 ```
 ┌─────────────────────┐    stdio / HTTP     ┌──────────────────────────┐
-│   Claude Desktop    │◄──────────────────►│    toad-mcp-server       │
+│   Claude Desktop    │◄────────────────-──►│    toad-mcp-server       │
 │   (MCP Client)      │                     │                          │
 └─────────────────────┘                     │  ┌────────────────────┐  │
                                             │  │ toad_search_docs   │──┼──► Semantic Search API
                                             │  ├────────────────────┤  │
                                             │  │ toad_run_eval      │──┼──► Eval Framework API
                                             │  ├────────────────────┤  │
-                                            │  │ toad_system_status  │──┼──► Health checks
+                                            │  │ toad_system_status │──┼──► Health checks
+                                            │  ├───────────────-────┤  │
+                                            │  │ toad_list_prompts  │  │
                                             │  ├────────────────────┤  │
-                                            │  │ toad_list_prompts   │  │
-                                            │  ├────────────────────┤  │
-                                            │  │ toad_get_prompt     │  │
+                                            │  │ toad_get_prompt    │  │
                                             │  └────────────────────┘  │
                                             └──────────────────────────┘
 ```
