@@ -1,3 +1,9 @@
+/**
+ * Lightweight HTTP client wrapping native fetch.
+ * Provides consistent JSON handling, timeout via AbortSignal,
+ * and a unified response shape for all outbound service calls.
+ */
+
 const DEFAULT_TIMEOUT_MS = 10_000;
 
 interface HttpClientConfig {
@@ -16,6 +22,7 @@ export class HttpClient {
   private timeoutMs: number;
 
   constructor(config: HttpClientConfig) {
+    // Strip trailing slashes to avoid double-slash in URL construction
     this.baseUrl = config.baseUrl.replace(/\/+$/, "");
     this.timeoutMs = config.timeoutMs ?? DEFAULT_TIMEOUT_MS;
   }

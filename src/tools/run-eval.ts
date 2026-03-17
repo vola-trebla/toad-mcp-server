@@ -19,8 +19,10 @@ interface EvalResult {
   }>;
 }
 
+// Module-level client — reused across all invocations to avoid re-creation per call
 const httpClient = new HttpClient({ baseUrl: config.evalFramework.baseUrl });
 
+/** Registers toad_run_eval tool — triggers eval suite execution and returns scored results. */
 export function registerRunEvalTool(server: McpServer): void {
   server.tool(
     "toad_run_eval",

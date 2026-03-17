@@ -3,6 +3,12 @@ import { ResourceTemplate } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { getPrompts, getPromptByName } from "../services/prompt-registry.js";
 import { checkAllServices } from "../services/health-check.js";
 
+/**
+ * Registers MCP Resources for URI-based data access (read-only).
+ * Resources complement tools by exposing data clients can fetch on demand:
+ * - toad://system/status — static resource, live health check
+ * - toad://prompts/{name} — dynamic resource template with list callback for discovery
+ */
 export function registerResources(server: McpServer): void {
   server.registerResource(
     "system-status",
@@ -48,6 +54,7 @@ export function registerResources(server: McpServer): void {
       mimeType: "application/json",
     },
     async (uri, variables) => {
+      // ResourceTemplate variables can be string | string[] — normalize to string
       const name = typeof variables.name === "string" ? variables.name : variables.name?.[0];
       if (!name) {
         return { contents: [{ uri: uri.href, text: JSON.stringify({ error: "Missing prompt name" }) }] };

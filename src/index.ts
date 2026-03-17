@@ -1,3 +1,10 @@
+/**
+ * MCP Server entry point.
+ *
+ * Supports two transports selected via TRANSPORT env var:
+ * - "stdio" (default) — for Claude Desktop local integration
+ * - "http" — Streamable HTTP via Express for remote/multi-client access
+ */
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { registerSearchDocumentsTool } from "./tools/search-documents.js";
 import { registerRunEvalTool } from "./tools/run-eval.js";
@@ -6,6 +13,7 @@ import { registerListPromptsTool } from "./tools/list-prompts.js";
 import { registerGetPromptTool } from "./tools/get-prompt.js";
 import { registerResources } from "./resources/index.js";
 
+/** Creates and configures the MCP server with all tools and resources. */
 function createServer(): McpServer {
   const server = new McpServer({
     name: "toad-mcp-server",
@@ -30,6 +38,11 @@ async function startStdio(): Promise<void> {
   console.error("[toad-mcp-server] Running on stdio transport");
 }
 
+/**
+ * Starts Streamable HTTP transport on Express.
+ * Each client gets a unique session via randomUUID.
+ * Binds to 127.0.0.1 by default to prevent DNS rebinding attacks.
+ */
 async function startHttp(): Promise<void> {
   const { StreamableHTTPServerTransport } = await import("@modelcontextprotocol/sdk/server/streamableHttp.js");
   const { randomUUID } = await import("node:crypto");

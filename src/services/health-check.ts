@@ -1,3 +1,8 @@
+/**
+ * Shared health check service.
+ * Used by both the toad_system_status tool and toad://system/status resource
+ * to avoid duplicating probe logic.
+ */
 import { HttpClient } from "./http-client.js";
 import { config } from "./config.js";
 import { extractError } from "../utils/responses.js";
@@ -10,6 +15,7 @@ export interface HealthCheck {
   error?: string;
 }
 
+/** Probes a single service's /health endpoint and measures latency. */
 export async function checkService(name: string, baseUrl: string): Promise<HealthCheck> {
   const client = new HttpClient({ baseUrl, timeoutMs: config.healthCheckTimeoutMs });
   const start = Date.now();
@@ -34,6 +40,7 @@ export async function checkService(name: string, baseUrl: string): Promise<Healt
   }
 }
 
+/** Probes all registered portfolio services in parallel. */
 export async function checkAllServices(): Promise<{ checks: HealthCheck[]; allHealthy: boolean }> {
   const checks = await Promise.all([
     checkService("Semantic Search API", config.semanticSearch.baseUrl),

@@ -16,8 +16,10 @@ interface SearchResponse {
   total: number;
 }
 
+// Module-level client — reused across all invocations to avoid re-creation per call
 const httpClient = new HttpClient({ baseUrl: config.semanticSearch.baseUrl });
 
+/** Registers toad_search_documents tool — semantic search over documents via external API. */
 export function registerSearchDocumentsTool(server: McpServer): void {
   server.tool(
     "toad_search_documents",

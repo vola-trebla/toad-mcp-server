@@ -1,3 +1,10 @@
+/**
+ * Local prompt registry — serves as a data source for prompt management tools.
+ * Currently backed by an in-memory array of sample prompts.
+ * Designed to be swapped with an HTTP integration to the Prompt Registry service
+ * when that project is ready.
+ */
+
 export interface ScoreEntry {
   date: string;
   score: number;
