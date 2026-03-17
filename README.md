@@ -34,6 +34,13 @@ MCP server exposing portfolio AI tools via [Model Context Protocol](https://mode
 
 All tools support `response_format: "markdown" | "json"` where applicable.
 
+## Resources
+
+| URI                     | Description                                  |
+| ----------------------- | -------------------------------------------- |
+| `toad://system/status`  | Health status of all services (JSON)         |
+| `toad://prompts/{name}` | Get prompt by name with full metadata (JSON) |
+
 ## Quick Start
 
 ```bash
@@ -45,6 +52,9 @@ npm run build
 
 # Run (stdio — for Claude Desktop)
 npm start
+
+# Run (HTTP — for remote/multi-client access)
+TRANSPORT=http npm start
 
 # Dev mode
 npm run dev
@@ -88,10 +98,13 @@ Opens a web UI to test each tool interactively.
 
 ## Environment Variables
 
-| Variable              | Default                 | Description                     |
-| --------------------- | ----------------------- | ------------------------------- |
-| `SEMANTIC_SEARCH_URL` | `http://localhost:3001` | Semantic Search Engine endpoint |
-| `EVAL_FRAMEWORK_URL`  | `http://localhost:3002` | Eval Framework endpoint         |
+| Variable              | Default                 | Description                       |
+| --------------------- | ----------------------- | --------------------------------- |
+| `SEMANTIC_SEARCH_URL` | `http://localhost:3001` | Semantic Search Engine endpoint   |
+| `EVAL_FRAMEWORK_URL`  | `http://localhost:3002` | Eval Framework endpoint           |
+| `TRANSPORT`           | `stdio`                 | Transport mode: `stdio` or `http` |
+| `PORT`                | `3100`                  | HTTP transport port               |
+| `HOST`                | `127.0.0.1`             | HTTP transport bind address       |
 
 ## Scripts
 
