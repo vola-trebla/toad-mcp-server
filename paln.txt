@@ -1,0 +1,85 @@
+Здарова! 🐸
+
+Проект #9 — MCP Server. Погнали разбивать на таски.
+
+Сначала гляну skill по MCP, чтобы учесть лучшие практики.Окей, изучил MCP SDK guide и best practices. Теперь давай зафигачу таски. 🐸
+
+---
+
+## Project #9 — MCP Server (`toad-mcp-server`)
+
+**Суть:** MCP-сервер, который выставляет инструменты из твоего портфолио (Semantic Search, Eval Framework, Observability) по стандартному протоколу. Подключаешь в Claude Desktop — и из чата вызываешь свои тулы.
+
+---
+
+### Task 1 — Project Setup + First Tool (Semantic Search)
+
+**Что делаем:**
+- Инициализация проекта `toad-mcp-server` (npm, tsconfig NodeNext, strict mode)
+- Зависимости: `@modelcontextprotocol/sdk`, `zod`
+- Структура: `src/index.ts`, `src/tools/`, `src/services/`
+- Первый тул: `toad_search_documents` — принимает query string, стучится в Semantic Search Engine (#6) по HTTP, возвращает результаты
+- Транспорт: stdio (для Claude Desktop)
+- Zod-схемы для input validation
+- `registerTool()` с полным description, inputSchema, annotations
+- Запуск через `tsx` в dev, `tsc` → `dist/` для prod
+- Проверка: `npm run build` компилируется без ошибок
+
+**Результат:** Рабочий MCP-сервер с одним тулом, можно подключить в Claude Desktop и сделать поиск по документам.
+
+---
+
+### Task 2 — Eval Runner Tool + System Status Tool
+
+**Что делаем:**
+- Тул `toad_run_eval` — запускает eval suite из Eval Framework (#3). Принимает параметры (eval suite name, prompt variant), возвращает score/results
+- Тул `toad_system_status` — проверяет здоровье компонентов: Postgres (pgvector), Semantic Search API, Eval Framework. Возвращает статус каждого сервиса
+- Shared service layer: `src/services/http-client.ts` — переиспользуемый HTTP клиент для всех тулов
+- Annotations на каждом туле: `readOnlyHint`, `destructiveHint`, etc.
+- Error handling: actionable error messages (MCP best practice)
+
+**Результат:** Три тула работают, сервер покрывает три проекта портфолио.
+
+---
+
+### Task 3 — Prompt Management Tools + Response Formatting
+
+**Что делаем:**
+- Тул `toad_list_prompts` — список промптов из Prompt Registry (если интеграция с #8 готова, иначе — из локального JSON/файловой системы)
+- Тул `toad_get_prompt` — получить конкретный промпт по имени с метаданными (version, score history)
+- Dual response format: JSON + Markdown (по `response_format` параметру). JSON для machine processing, Markdown для human-readable output в Claude Desktop
+- Pagination support на `toad_list_prompts` (limit, offset, has_more)
+
+**Результат:** Пять тулов, сервер превращается в полноценную платформу управления.
+
+---
+
+### Task 4 — Claude Desktop Integration + README
+
+**Что делаем:**
+- Конфиг для Claude Desktop: `claude_desktop_config.json` с путём к серверу
+- Тестирование через MCP Inspector: `npx @modelcontextprotocol/inspector`
+- End-to-end проверка: подключить в Claude Desktop, вызвать каждый тул из чата
+- README.md: описание проекта, architecture diagram (ASCII), список тулов с описанием, инструкция по установке и подключению
+- Hub repo (`llm-infrastructure`) обновление
+
+**Результат:** Полностью рабочий MCP-сервер, задокументированный, протестированный через Inspector и Claude Desktop.
+
+---
+
+### Task 5 — Streamable HTTP Transport + Resource Registration
+
+**Что делаем:**
+- Второй транспорт: Streamable HTTP через Express (для remote access, multi-client). Выбор транспорта через `TRANSPORT` env var
+- MCP Resources: `toad://prompts/{name}`, `toad://system/status` — URI-based доступ к данным (в дополнение к тулам)
+- Resource list registration для dynamic discovery
+- DNS rebinding protection (bind to 127.0.0.1 для local)
+- Финальный `npm run build` + smoke test обоих транспортов
+
+**Результат:** Production-ready MCP-сервер с двумя транспортами, tools + resources, готовый к демонстрации на интервью. 🎯
+
+---
+
+**Итого: 5 тасков.** От "hello world MCP" до production-ready сервера с двумя транспортами и пятью+ тулами, покрывающими три проекта портфолио.
+
+Готов стартовать с Task 1? 🚀
