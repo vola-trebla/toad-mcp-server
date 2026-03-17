@@ -1,6 +1,8 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { registerSearchDocumentsTool } from "./tools/search-documents.js";
+import { registerRunEvalTool } from "./tools/run-eval.js";
+import { registerSystemStatusTool } from "./tools/system-status.js";
 
 const server = new McpServer({
   name: "toad-mcp-server",
@@ -8,6 +10,8 @@ const server = new McpServer({
 });
 
 registerSearchDocumentsTool(server);
+registerRunEvalTool(server);
+registerSystemStatusTool(server);
 
 async function main(): Promise<void> {
   const transport = new StdioServerTransport();

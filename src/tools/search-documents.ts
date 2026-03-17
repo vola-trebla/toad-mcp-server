@@ -25,6 +25,12 @@ export function registerSearchDocumentsTool(server: McpServer): void {
       query: z.string().describe("Natural language search query"),
       limit: z.number().min(1).max(50).default(10).describe("Maximum number of results to return"),
     },
+    {
+      readOnlyHint: true,
+      destructiveHint: false,
+      idempotentHint: true,
+      openWorldHint: true,
+    },
     async ({ query, limit }) => {
       try {
         const response = await httpClient.post<SearchResponse>("/api/search", {
