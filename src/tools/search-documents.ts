@@ -2,6 +2,7 @@ import { z } from "zod/v4";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { HttpClient } from "../services/http-client.js";
 import { config } from "../services/config.js";
+import { textContent, errorResponse, extractError } from "../utils/responses.js";
 
 interface SearchResult {
   id: string;
@@ -33,21 +34,12 @@ export function registerSearchDocumentsTool(server: McpServer): void {
     },
     async ({ query, limit }) => {
       try {
-        const response = await httpClient.post<SearchResponse>("/api/search", {
-          query,
-          limit,
-        });
+        const response = await httpClient.post<SearchResponse>("/api/search", { query, limit });
 
         if (!response.ok) {
-          return {
-            isError: true,
-            content: [
-              {
-                type: "text" as const,
-                text: `Semantic Search API returned ${response.status}. Ensure the service is running at ${config.semanticSearch.baseUrl}`,
-              },
-            ],
-          };
+          return errorResponse(
+            `Semantic Search API returned ${response.status}. Ensure the service is running at ${config.semanticSearch.baseUrl}`,
+          );
         }
 
         const { results, total } = response.data;
@@ -59,25 +51,11 @@ export function registerSearchDocumentsTool(server: McpServer): void {
           )
           .join("\n\n---\n\n");
 
-        return {
-          content: [
-            {
-              type: "text" as const,
-              text: `Found ${total} results for "${query}" (showing ${results.length}):\n\n${formatted}`,
-            },
-          ],
-        };
+        return textContent(`Found ${total} results for "${query}" (showing ${results.length}):\n\n${formatted}`);
       } catch (error) {
-        const message = error instanceof Error ? error.message : String(error);
-        return {
-          isError: true,
-          content: [
-            {
-              type: "text" as const,
-              text: `Failed to reach Semantic Search API at ${config.semanticSearch.baseUrl}: ${message}`,
-            },
-          ],
-        };
+        return errorResponse(
+          `Failed to reach Semantic Search API at ${config.semanticSearch.baseUrl}: ${extractError(error)}`,
+        );
       }
     },
   );

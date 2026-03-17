@@ -2,6 +2,7 @@ import { z } from "zod/v4";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { HttpClient } from "../services/http-client.js";
 import { config } from "../services/config.js";
+import { textContent, errorResponse, extractError } from "../utils/responses.js";
 
 interface EvalResult {
   suite: string;
@@ -36,21 +37,12 @@ export function registerRunEvalTool(server: McpServer): void {
     },
     async ({ suite, variant }) => {
       try {
-        const response = await httpClient.post<EvalResult>("/api/eval/run", {
-          suite,
-          variant,
-        });
+        const response = await httpClient.post<EvalResult>("/api/eval/run", { suite, variant });
 
         if (!response.ok) {
-          return {
-            isError: true,
-            content: [
-              {
-                type: "text" as const,
-                text: `Eval Framework returned ${response.status}. Ensure the service is running at ${config.evalFramework.baseUrl}`,
-              },
-            ],
-          };
+          return errorResponse(
+            `Eval Framework returned ${response.status}. Ensure the service is running at ${config.evalFramework.baseUrl}`,
+          );
         }
 
         const { score, passed, failed, total, details } = response.data;
@@ -68,20 +60,11 @@ export function registerRunEvalTool(server: McpServer): void {
           ),
         ].join("\n");
 
-        return {
-          content: [{ type: "text" as const, text: summary }],
-        };
+        return textContent(summary);
       } catch (error) {
-        const message = error instanceof Error ? error.message : String(error);
-        return {
-          isError: true,
-          content: [
-            {
-              type: "text" as const,
-              text: `Failed to reach Eval Framework at ${config.evalFramework.baseUrl}: ${message}`,
-            },
-          ],
-        };
+        return errorResponse(
+          `Failed to reach Eval Framework at ${config.evalFramework.baseUrl}: ${extractError(error)}`,
+        );
       }
     },
   );

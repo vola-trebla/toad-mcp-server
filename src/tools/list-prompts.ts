@@ -1,6 +1,7 @@
 import { z } from "zod/v4";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { getPrompts } from "../services/prompt-registry.js";
+import { textContent } from "../utils/responses.js";
 
 export function registerListPromptsTool(server: McpServer): void {
   server.tool(
@@ -29,14 +30,7 @@ export function registerListPromptsTool(server: McpServer): void {
       const hasMore = offset + limit < total;
 
       if (response_format === "json") {
-        return {
-          content: [
-            {
-              type: "text" as const,
-              text: JSON.stringify({ prompts: page, total, offset, limit, has_more: hasMore }, null, 2),
-            },
-          ],
-        };
+        return textContent(JSON.stringify({ prompts: page, total, offset, limit, has_more: hasMore }, null, 2));
       }
 
       const lines = [
@@ -50,9 +44,7 @@ export function registerListPromptsTool(server: McpServer): void {
         hasMore ? `_More results available. Use offset=${offset + limit} to continue._` : "_End of list._",
       ];
 
-      return {
-        content: [{ type: "text" as const, text: lines.join("\n") }],
-      };
+      return textContent(lines.join("\n"));
     },
   );
 }
