@@ -1,4 +1,4 @@
-# toad-mcp-server 🐸
+# toad-mcp-server
 
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white)
 ![Node.js](https://img.shields.io/badge/Node.js-339933?logo=nodedotjs&logoColor=white)
